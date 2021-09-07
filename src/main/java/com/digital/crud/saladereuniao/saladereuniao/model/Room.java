@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "meetingroom")
 public class Room {
 
-    private long id;
+    private Long id;
 
     private String name;
 
@@ -25,7 +25,7 @@ public class Room {
 
     }
 
-    public Room(long id, String name, String date, String startHour, String endHour){
+    public Room(Long id, String name, String date, String startHour, String endHour){
         this.id = id;
         this.name = name;
         this.date = date;
@@ -35,11 +35,11 @@ public class Room {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

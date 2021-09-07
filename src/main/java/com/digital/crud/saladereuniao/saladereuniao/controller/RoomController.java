@@ -1,9 +1,8 @@
 package com.digital.crud.saladereuniao.saladereuniao.controller;
 
-import com.digital.crud.saladereuniao.saladereuniao.exception.ResourceNotFaundException;
+import com.digital.crud.saladereuniao.saladereuniao.exception.ResourceNotFoundException;
 import com.digital.crud.saladereuniao.saladereuniao.model.Room;
 import com.digital.crud.saladereuniao.saladereuniao.repository.RoomRepository;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +24,11 @@ public class RoomController {
         return roomRepository.findAll();
     }
 
-    @GetMapping("/rooms/id")
+    @GetMapping("/rooms/{id}")
     public ResponseEntity<Room> getRoomById(@PathVariable(value = "id") long roomId)
-        throws ResourceNotFaundException {
+        throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(()-> new ResourceNotFaundException("Room not found: " + roomId));
+                .orElseThrow(()-> new ResourceNotFoundException("Room not found: " + roomId));
         return ResponseEntity.ok().body(room);
     }
 
@@ -40,9 +39,9 @@ public class RoomController {
 
     @PutMapping(value = "/rooms/{id}")
     public ResponseEntity<Room> updateRoom(@PathVariable(value = "id") Long roomId,
-                                           @Valid @RequestBody Room roomDetails) throws ResourceNotFaundException {
+                                           @Valid @RequestBody Room roomDetails) throws ResourceNotFoundException {
         Room room = roomRepository.findById((roomId))
-                .orElseThrow(()-> new ResourceNotFaundException("Room not found for this id:: " + roomId));
+                .orElseThrow(()-> new ResourceNotFoundException("Room not found for this id:: " + roomId));
         
         room.setName(roomDetails.getName());
         room.setDate(roomDetails.getDate());
@@ -53,10 +52,11 @@ public class RoomController {
         return ResponseEntity.ok(updateRoom);
     }
 
+    @DeleteMapping("/rooms/{id}")
     public Map<String, Boolean> deleteRoom(@PathVariable(value = "id") Long roomId)
-        throws ResourceNotFaundException {
+        throws ResourceNotFoundException {
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(()-> new ResourceNotFaundException("Room not found for this id: "+ roomId));
+                .orElseThrow(()-> new ResourceNotFoundException("Room not found for this id: "+ roomId));
 
         roomRepository.delete(room);
         Map<String, Boolean> response = new HashMap<>();
